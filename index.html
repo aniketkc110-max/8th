@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="gu" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ધોરણ 8 ગણિત - વક્ર, બહુકોણ અને ચતુષ્કોણ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb', // Blue
+                        secondary: '#f97316', // Orange
+                        darkBg: '#0f172a',
+                        cardDark: 'rgba(30, 41, 59, 0.7)',
+                        cardLight: 'rgba(255, 255, 255, 0.8)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for Gujarati (Noto Sans Gujarati) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-darkBg text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-orange-500 z-50 w-0 transition-all duration-100"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="sticky top-0 z-40 glass-card shadow-sm border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">📚</span>
+                    <span class="font-bold text-lg bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">ધોરણ 8 ગણિત</span>
+                </div>
+                <!-- Search Box -->
+                <div class="hidden md:flex items-center relative flex-1 max-w-xs mx-4">
+                    <i class="fa-solid fa-search absolute left-3 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="શોધો (Search)..." class="w-full pl-10 pr-4 py-1.5 text-sm rounded-full border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex items-center space-x-3">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition" aria-label="Toggle Theme">
+                        <i id="theme-icon" class="fa-solid fa-moon text-lg text-slate-600 dark:text-yellow-400"></i>
+                    </button>
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Sub Navigation Menu -->
+        <div class="hidden md:flex bg-slate-100/80 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800 overflow-x-auto px-4 py-2 space-x-6 text-sm font-semibold whitespace-nowrap">
+            <a href="#home" class="hover:text-blue-600 transition">હોમ</a>
+            <a href="#curves" class="hover:text-blue-600 transition">વક્ર</a>
+            <a href="#polygons" class="hover:text-blue-600 transition">બહુકોણ</a>
+            <a href="#angles" class="hover:text-blue-600 transition">ખૂણાના ગુણધર્મો</a>
+            <a href="#quadrilaterals" class="hover:text-blue-600 transition">ચતુષ્કોણ</a>
+            <a href="#comparison" class="hover:text-blue-600 transition">સરખામણી કોષ્ટક</a>
+            <a href="#quiz" class="hover:text-blue-600 transition">ક્વિઝ</a>
+            <a href="#practice" class="hover:text-blue-600 transition">પ્રેક્ટિસ</a>
+            <a href="#summary" class="hover:text-blue-600 transition">સારાંશ</a>
+            <a href="#games" class="text-orange-500 hover:underline transition">🎮 ગેમ્સ ઝોન</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 bg-black/50 hidden backdrop-blur-sm">
+        <div class="absolute right-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-900 p-6 shadow-2xl flex flex-col space-y-4">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
+                <span class="font-bold text-lg text-blue-600">મેનુ</span>
+                <button onclick="toggleMobileMenu()" class="p-2"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <a href="#home" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">હોમ</a>
+            <a href="#curves" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">વક્ર (Curves)</a>
+            <a href="#polygons" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">બહુકોણ (Polygons)</a>
+            <a href="#angles" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">ખૂણાના ગુણધર્મો</a>
+            <a href="#quadrilaterals" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">ચતુષ્કોણ (Quadrilaterals)</a>
+            <a href="#comparison" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">સરખામણી કોષ્ટક</a>
+            <a href="#quiz" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">ક્વિઝ</a>
+            <a href="#practice" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">પ્રેક્ટિસ</a>
+            <a href="#summary" onclick="toggleMobileMenu()" class="py-2 hover:text-blue-500">સારાંશ</a>
+            <a href="#games" onclick="toggleMobileMenu()" class="py-2 text-orange-500 font-bold">🎮 ગેમ્સ ઝોન</a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-20 w-full">
+
+        <!-- HOME / HERO SECTION -->
+        <section id="home" class="relative overflow-hidden rounded-3xl glass-card p-8 md:p-16 text-center shadow-xl">
+            <!-- Animated Background Shapes -->
+            <div class="absolute -top-12 -left-12 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl animate-pulse"></div>
+            <div class="absolute -bottom-12 -right-12 w-48 h-48 bg-orange-400/20 rounded-full blur-2xl animate-pulse"></div>
+            
+            <div class="relative z-10 max-w-3xl mx-auto space-y-6">
+                <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300">ધોરણ 8 • ગણિત પ્રકરણ 3</span>
+                <h1 class="text-3xl md:text-5xl font-bold tracking-tight">
+                    વક્ર, બહુકોણ અને ચતુષ્કોણ <br>
+                    <span class="bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">(Curves, Polygons and Quadrilaterals)</span>
+                </h1>
+                <p class="text-slate-600 dark:text-slate-300 text-base md:text-lg">
+                    સરળ અને રસપ્રદ ગુજરાતી ભાષામાં ભણો ભૂમિતિના પાયાના ખ્યાલો, આકૃતિઓ, સૂત્રો અને ક્વિઝ સાથે!
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <a href="#curves" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-500/30 transition transform hover:-translate-y-0.5">
+                        શરૂ કરો (Start Learning) <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#games" class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-lg shadow-orange-500/30 transition transform hover:-translate-y-0.5">
+                        🎮 ગેમ્સ ઝોન રમવા જાઓ <i class="fa-solid fa-gamepad ml-2"></i>
+                    </a>
+                    <button onclick="window.print()" class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold transition">
+                        <i class="fa-solid fa-print mr-2"></i> નોંધ પ્રિન્ટ કરો
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: CURVES (વક્ર) -->
+        <section id="curves" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-bezier-curve"></i> ૧. વક્ર (Curves)
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">પેન્સિલ કે કલમને કાગળ પર ઉઠાવ્યા વગર સળંગ દોરવામાં આવતી કોઈપણ લીટી કે આકૃતિ.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Topic 1: What is Curve -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex items-center justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl">
+                        <svg class="w-24 h-24 text-blue-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <path d="M10 50 Q 25 10, 50 50 T 90 50" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">વક્ર એટલે શું? (What is Curve?)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">કોઈપણ સળંગ વળાંકવાળી રેખા કે આકૃતિ, જેને દોરતી વખતે પેન્સિલ ઉઠાવવી પડતી નથી.</p>
+                    <div class="text-xs bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">ઉદાહરણ: સાદી રેખાઓ, વળાંકવાળા આકારો.</div>
+                </div>
+
+                <!-- Topic 2: Simple Curve -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex items-center justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl">
+                        <svg class="w-24 h-24 text-orange-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <circle cx="50" cy="50" r="30" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">સાલો વક્ર (Simple Curve)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">જે વક્ર પોતાની જાતને ક્યાંય પણ ક્રોસ (ছেદતો) કરતો નથી.</p>
+                    <div class="text-xs bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">ઉદાહરણ: વર્તુળ, 'C' કે 'S' આકાર.</div>
+                </div>
+
+                <!-- Topic 3: Open Curve -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex items-center justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl">
+                        <svg class="w-24 h-24 text-blue-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <path d="M20 30 Q 50 80, 80 30" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">ખુલ્લો વક્ર (Open Curve)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">જે વક્રના શરૂઆતનો અને અંતિમ છેડો અલગ-અલગ હોય, જોડાયેલા ન હોય.</p>
+                    <div class="text-xs bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">ઉદાહરણ: 'U' આકાર, સાપ જેવો આકાર.</div>
+                </div>
+
+                <!-- Topic 4: Closed Curve -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex items-center justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl">
+                        <svg class="w-24 h-24 text-orange-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <rect x="25" y="25" width="50" height="50" rx="5" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">બંધ વક્ર (Closed Curve)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">જે વક્રના શરૂઆતનો અને અંતિમ છેડો એક જ જગ્યાએ મળતા હોય અથવા ચારે બાજુથી બંધ હોય.</p>
+                    <div class="text-xs bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">ઉદાહરણ: ચોરસ, લંબચોરસ, વર્તુળ.</div>
+                </div>
+
+                <!-- Topic 5: Plane Curve -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4 md:col-span-2 lg:col-span-2">
+                    <div class="flex items-center justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl">
+                        <svg class="w-24 h-24 text-blue-600" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="50,15 90,85 10,85" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">સમતલીય વક્ર (Plane Curve)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">જે વક્રને દોરવા માટે માત્ર એક જ સપાટી (સમતલ - કાગળ) ની જરૂર પડે અને તે સંપૂર્ણપણે તેમાં સમાઈ જાય.</p>
+                    <div class="text-xs bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">તમામ ત્રિકોણ, ચતુષ્કોણ અને વર્તુળો એ સમતલીય વક્ર છે.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: POLYGONS (બહુકોણ) -->
+        <section id="polygons" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-shapes"></i> ૨. બહુકોણ (Polygons)
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">માત્ર રેખાખંડોથી જ બનતી બંધ સમતલીય આકૃતિ.</p>
+            </div>
+
+            <!-- Convex & Concave Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Convex -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-40 bg-slate-100 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-32 text-blue-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <polygon points="50,10 90,40 75,90 25,90 10,40" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-blue-600">બહિર્મુખ બહુકોણ (Convex Polygon)</h3>
+                    <ul class="text-sm space-y-2 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>બધા જ ખૂણાઓનું માપ $180^\circ$ કરતા નાનું હોય છે.</li>
+                        <li>તમામ વિકર્ણો આકૃતિના અંદરના ભાગમાં જ હોય છે.</li>
+                        <li>ઉદાહરણ: ત્રિકોણ, નિયમિત પંચકોણ.</li>
+                    </ul>
+                </div>
+
+                <!-- Concave -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-40 bg-slate-100 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-32 text-orange-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                            <polygon points="50,10 90,40 50,60 75,90 25,90 10,40" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-orange-500">અંતર્મુખ બહુકોણ (Concave Polygon)</h3>
+                    <ul class="text-sm space-y-2 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>ઓછામાં ઓછો એક ખૂણો $180^\circ$ કરતા મોટો હોય છે.</li>
+                        <li>ઓછામાં ઓછો એક વિકર્ણ આકૃતિના બહારના ભાગમાં આવે છે.</li>
+                        <li>ઉદાહરણ: અંદરની તરફ વળેલી આકૃતિઓ, સ્ટાર આકાર.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Regular vs Irregular -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-3">
+                    <h3 class="font-bold text-lg text-blue-600">નિયમિત બહુકોણ (Regular Polygon)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">બધી જ બાજુઓ સમાન લંબાઈની અને બધા જ ખૂણા સમાન માપના હોય.</p>
+                    <div class="text-xs bg-blue-50 dark:bg-slate-800 p-2 rounded-lg">ઉદાહરણ: સમબાજુ ત્રિકોણ, ચોરસ.</div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-3">
+                    <h3 class="font-bold text-lg text-orange-500">અનિયમિત બહુકોણ (Irregular Polygon)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">બધી બાજુઓ કે બધા ખૂણા સરખા ન હોય, અલગ-અલગ માપના હોય.</p>
+                    <div class="text-xs bg-orange-50 dark:bg-slate-800 p-2 rounded-lg">ઉદાહરણ: લંબચોરસ, વિષમબાજુ ત્રિકોણ.</div>
+                </div>
+            </div>
+
+            <!-- Polygon Names Table -->
+            <div class="glass-card rounded-2xl shadow-md overflow-hidden">
+                <div class="p-4 bg-blue-600 text-white font-bold text-center">બહુકોણના નામ (Polygon Names Table)</div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                                <th class="p-3">બાજુઓની સંખ્યા ($n$)</th>
+                                <th class="p-3">બહુકોણનું નામ (Gujarati)</th>
+                                <th class="p-3">નામ (English)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            <tr><td class="p-3">3</td><td class="p-3">ત્રિકોણ</td><td class="p-3">Triangle</td></tr>
+                            <tr><td class="p-3">4</td><td class="p-3">ચતુષ્કોણ</td><td class="p-3">Quadrilateral</td></tr>
+                            <tr><td class="p-3">5</td><td class="p-3">પંચકોણ</td><td class="p-3">Pentagon</td></tr>
+                            <tr><td class="p-3">6</td><td class="p-3">ષષ્ટકોણ</td><td class="p-3">Hexagon</td></tr>
+                            <tr><td class="p-3">7</td><td class="p-3">સપ્તકોણ</td><td class="p-3">Heptagon</td></tr>
+                            <tr><td class="p-3">8</td><td class="p-3">અષ્ટકોણ</td><td class="p-3">Octagon</td></tr>
+                            <tr><td class="p-3">n</td><td class="p-3">n-કોણ</td><td class="p-3">n-gon</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: ANGLE PROPERTIES -->
+        <section id="angles" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-calculator"></i> ૩. ખૂણાના ગુણધર્મો અને સૂત્રો
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">અંદરના અને બહારના ખૂણાઓ શોધવા માટેના મહત્વના સૂત્રો.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Interior Angle Sum -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4 border-l-4 border-blue-600">
+                    <h3 class="font-bold text-lg">અંદરના ખૂણાના સરવાળાનું સૂત્ર</h3>
+                    <div class="p-4 bg-blue-50 dark:bg-slate-800 rounded-xl text-center font-mono text-xl text-blue-600 font-bold">
+                        (n − 2) × 180°
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">જ્યાં <span class="font-bold">n</span> એ બાજુઓની સંખ્યા છે.</p>
+                    <ul class="text-xs space-y-1 text-slate-500">
+                        <li>• ત્રિકોણ ($n=3$): $(3-2) \times 180^\circ = 180^\circ$</li>
+                        <li>• ચતુષ્કોણ ($n=4$): $(4-2) \times 180^\circ = 360^\circ$</li>
+                        <li>• પંચકોણ ($n=5$): $(5-2) \times 180^\circ = 540^\circ$</li>
+                        <li>• ષષ્ટકોણ ($n=6$): $(6-2) \times 180^\circ = 720^\circ$</li>
+                    </ul>
+                </div>
+
+                <!-- Exterior Angle Sum -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4 border-l-4 border-orange-500">
+                    <h3 class="font-bold text-lg">બહિષ્કોણોના સરવાળાનો ગુણધર્મ</h3>
+                    <div class="p-4 bg-orange-50 dark:bg-slate-800 rounded-xl text-center font-mono text-xl text-orange-500 font-bold">
+                        હંમેશા = 360°
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">કોઈપણ બહુકોણના બધા જ બહિષ્કોણોના માપનો સરવાળો હંમેશા $360^\circ$ જ થાય છે.</p>
+                    <div class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs space-y-1">
+                        <p class="font-bold">નિયમિત બહુકોણના પ્રત્યેક બહિષ્કોણનું માપ:</p>
+                        <p class="font-mono text-blue-500 font-bold">360° / n</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: QUADRILATERALS -->
+        <section id="quadrilaterals" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-square"></i> ૪. ચતુષ્કોણ અને તેના પ્રકારો
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">ચારેય બાજુઓવાળી બંધ આકૃતિ અને તેના વિશિષ્ટ પ્રકારો.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 1. Parallelogram -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-20 text-blue-600" viewBox="0 0 100 60" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="20,50 80,50 95,10 35,10" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-blue-600">૧. સમાંતરબાજુ ચતુષ્કોણ</h3>
+                    <ul class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>સામસામેની બાજુઓ સમાન અને સમાંતર.</li>
+                        <li>સામસામેના ખૂણા સમાન.</li>
+                        <li>પાસપાસેના ખૂણા પૂરક ($180^\circ$).</li>
+                        <li>વિકર્ણો પરસ્પર દુભાગે છે.</li>
+                    </ul>
+                </div>
+
+                <!-- 2. Rhombus -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-24 text-orange-500" viewBox="0 0 100 80" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="50,10 90,40 50,70 10,40" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-orange-500">૨. સમચતુષ્કોણ</h3>
+                    <ul class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>બધી જ બાજુઓ સરખી.</li>
+                        <li>સામસામેની બાજુઓ સમાંતર.</li>
+                        <li>વિકર્ણો પરસ્પર <b>કાટખૂણે</b> દુભાગે છે.</li>
+                    </ul>
+                </div>
+
+                <!-- 3. Rectangle -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-20 text-blue-600" viewBox="0 0 100 60" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="15" y="10" width="70" height="40" rx="2" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-blue-600">૩. લંબચોરસ</h3>
+                    <ul class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>સામસામેની બાજુઓ સરખી.</li>
+                        <li>પ્રત્યેક ખૂણો કાટખૂણો ($90^\circ$).</li>
+                        <li>વિકર્ણો સમાન લંબાઈના હોય છે.</li>
+                    </ul>
+                </div>
+
+                <!-- 4. Square -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-32 text-orange-500" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="20" y="20" width="60" height="60" rx="2" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-orange-500">૪. ચોરસ</h3>
+                    <ul class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>બધી જ બાજુઓ સરખી.</li>
+                        <li>પ્રત્યેક ખૂણો કાટખૂણો ($90^\circ$).</li>
+                        <li>વિકર્ણો સમાન અને કાટખૂણે દુભાગે છે.</li>
+                    </ul>
+                </div>
+
+                <!-- 5. Kite -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-32 text-blue-600" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="50,10 80,45 50,90 20,45" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-blue-600">૫. પતંગ આકાર (Kite)</h3>
+                    <ul class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>પાસપાસેની બાજુઓની બે જોડ સમાન.</li>
+                        <li>એક વિકર્ણ બીજા વિકર્ણને કાટખૂણે દુભાગે છે.</li>
+                    </ul>
+                </div>
+
+                <!-- 6. Trapezium -->
+                <div class="glass-card p-6 rounded-2xl shadow-md space-y-4">
+                    <div class="flex justify-center h-32 bg-blue-50 dark:bg-slate-800/50 rounded-xl items-center">
+                        <svg class="w-32 h-24 text-orange-500" viewBox="0 0 100 70" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="20,55 80,55 65,15 35,15" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-orange-500">૬. સમલંબ ચતુષ્કોણ (Trapezium)</h3>
+                    <ul class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300 list-disc list-inside">
+                        <li>સામસામેની બાજુઓની માત્ર એક જ જોડ સમાંતર હોય છે.</li>
+                        <li>અસમાંતર બાજુઓ સરખી હોય તો સમદ્વિબાજુ સમલંબ કહેવાય.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: COMPARISON TABLE -->
+        <section id="comparison" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-table"></i> ૫. ચતુષ્કોણની સરખામણી કોષ્ટક
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">વિવિધ ચતુષ્કોણના ગુણધર્મોનું ઝડપી સરખામણી કોષ્ટક.</p>
+            </div>
+
+            <div class="glass-card rounded-2xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center border-collapse text-xs md:text-sm">
+                        <thead>
+                            <tr class="bg-blue-600 text-white">
+                                <th class="p-3 text-left">ચતુષ્કોણ</th>
+                                <th class="p-3">સરખી બાજુઓ</th>
+                                <th class="p-3">સમાંતર બાજુઓ</th>
+                                <th class="p-3">૯૦° ખૂણા</th>
+                                <th class="p-3">સરખા વિકર્ણો</th>
+                                <th class="p-3">કાટખૂણા વિકર્ણો</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            <tr>
+                                <td class="p-3 font-bold text-left">સમાંતરબાજુ</td>
+                                <td class="p-3 text-orange-500">સામસામેની</td>
+                                <td class="p-3 text-green-600">બંને જોડ</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                            </tr>
+                            <tr class="bg-slate-50/50 dark:bg-slate-800/30">
+                                <td class="p-3 font-bold text-left">સમચતુષ્કોણ</td>
+                                <td class="p-3 text-green-600">બધી જ</td>
+                                <td class="p-3 text-green-600">બંને જોડ</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-green-600">હા</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-left">લંબચોરસ</td>
+                                <td class="p-3 text-orange-500">સામસામેની</td>
+                                <td class="p-3 text-green-600">બંને જોડ</td>
+                                <td class="p-3 text-green-600">હા</td>
+                                <td class="p-3 text-green-600">હા</td>
+                                <td class="p-3 text-red-500">ના</td>
+                            </tr>
+                            <tr class="bg-slate-50/50 dark:bg-slate-800/30">
+                                <td class="p-3 font-bold text-left">ચોરસ</td>
+                                <td class="p-3 text-green-600">બધી જ</td>
+                                <td class="p-3 text-green-600">બંને જોડ</td>
+                                <td class="p-3 text-green-600">હા</td>
+                                <td class="p-3 text-green-600">હા</td>
+                                <td class="p-3 text-green-600">હા</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-left">પતંગ આકાર</td>
+                                <td class="p-3 text-orange-500">પાસપાસેની</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-green-600">હા</td>
+                            </tr>
+                            <tr class="bg-slate-50/50 dark:bg-slate-800/30">
+                                <td class="p-3 font-bold text-left">સમલંબ</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-orange-500">એક જ જોડ</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                                <td class="p-3 text-red-500">ના</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: INTERACTIVE QUIZ -->
+        <section id="quiz" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-circle-question"></i> ૬. ઇન્ટરેક્ટિવ ક્વિઝ (MCQ)
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">તમારા જ્ઞાનની ચકાસણી કરો!</p>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-2xl shadow-xl max-w-2xl mx-auto space-y-6">
+                <div id="quiz-container">
+                    <div class="flex justify-between items-center mb-4 text-sm font-semibold text-slate-500">
+                        <span id="question-number">પ્રશ્ન ૧ / ૨૫</span>
+                        <span id="score-display">સ્કોર: ૦</span>
+                    </div>
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full mb-6 overflow-hidden">
+                        <div id="quiz-progress" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+                    </div>
+
+                    <h3 id="question-text" class="text-lg font-bold mb-4">પ્રશ્ન લોડ થઈ રહ્યો છે...</h3>
+                    <div id="options-container" class="space-y-3"></div>
+                    <div id="quiz-feedback" class="mt-4 p-3 rounded-xl hidden font-semibold text-center"></div>
+                </div>
+
+                <div id="quiz-complete" class="hidden text-center space-y-4">
+                    <div class="text-5xl">🏆</div>
+                    <h3 class="text-2xl font-bold">અભિનંદન! ક્વિઝ પૂર્ણ થઈ ગઈ છે.</h3>
+                    <p id="final-score" class="text-lg text-slate-600 dark:text-slate-300"></p>
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg transition">
+                        ફરીથી રમો (Restart Quiz)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: PRACTICE QUESTIONS -->
+        <section id="practice" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-pen-to-square"></i> ૭. પ્રેક્ટિસ પ્રશ્નો (Practice Questions)
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">સરળ, મધ્યમ અને સખત પ્રેક્ટિસ પ્રશ્નો અને ઉત્તરો.</p>
+            </div>
+
+            <div class="space-y-4" id="practice-container">
+                <!-- Practice Item 1 -->
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-900/50 text-green-600">સરળ (Easy)</span>
+                        <span class="text-xs text-slate-400">પ્રશ્ન ૧</span>
+                    </div>
+                    <p class="font-bold text-base">એક ચતુષ્કોણના ત્રણ ખૂણાના માપ 70°, 80° અને 120° છે, તો ચોથો ખૂણો શોધો.</p>
+                    <button onclick="toggleAnswer(this)" class="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline">ઉત્તર જુઓ <i class="fa-solid fa-chevron-down ml-1"></i></button>
+                    <div class="answer-box hidden pt-2 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 space-y-1">
+                        <p>ચતુષ્કોણના ચારેય ખૂણાના માપનો સરવાળો = 360°</p>
+                        <p>चौथो ખૂણો = 360° - (70° + 80° + 120°) = 360° - 270° = 90°</p>
+                    </div>
+                </div>
+
+                <!-- Practice Item 2 -->
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-900/50 text-green-600">સરળ (Easy)</span>
+                        <span class="text-xs text-slate-400">પ્રશ્ન ૨</span>
+                    </div>
+                    <p class="font-bold text-base">નિયમિત ષષ્ટકોણના પ્રત્યેક બહિષ્કોણનું માપ શોધો.</p>
+                    <button onclick="toggleAnswer(this)" class="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline">ઉત્તર જુઓ <i class="fa-solid fa-chevron-down ml-1"></i></button>
+                    <div class="answer-box hidden pt-2 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 space-y-1">
+                        <p>ષષ્ટકોણ માટે બાજુઓ n = 6</p>
+                        <p>પ્રત્યેક બહિષ્કોણ = 360° / n = 360° / 6 = 60°</p>
+                    </div>
+                </div>
+
+                <!-- Practice Item 3 -->
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600">મધ્યમ (Medium)</span>
+                        <span class="text-xs text-slate-400">પ્રશ્ન ૩</span>
+                    </div>
+                    <p class="font-bold text-base">એક નિયમિત બહુકોણની બાજુઓની સંખ્યા શોધો જેના પ્રત્યેક બહિષ્કોણનું માપ 45° હોય.</p>
+                    <button onclick="toggleAnswer(this)" class="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline">ઉત્તર જુઓ <i class="fa-solid fa-chevron-down ml-1"></i></button>
+                    <div class="answer-box hidden pt-2 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 space-y-1">
+                        <p>બાજુઓની સંખ્યા n = 360° / બહિષ્કોણનું માપ</p>
+                        <p>n = 360° / 45° = 8 બાજુઓ (અષ્ટકોણ)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: SUMMARY -->
+        <section id="summary" class="space-y-8">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-3">
+                    <i class="fa-solid fa-bookmark"></i> ૮. ઝડપી સારાંશ (Summary & Revision Cards)
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 mt-1">પરીક્ષા પહેલાં ઝડપી રીવિઝન માટેના મુખ્ય મુદ્દાઓ.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-2">
+                    <h3 class="font-bold text-blue-600">વક્ર અને પ્રકારો</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">વક્ર એટલે સળંગ રેખા. તેના મુખ્ય પ્રકારો: સાદો વક્ર, ખુલ્લો વક્ર, બંધ વક્ર અને સમતલીય વક્ર.</p>
+                </div>
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-2">
+                    <h3 class="font-bold text-orange-500">બહુકોણ</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">માત્ર રેખાખંડોથી બનતી બંધ આકૃતિ. બહિર્મુખ અને અંતર્મુખ, તેમજ નિયમિત અને અનિયમિત બહુકોણ.</p>
+                </div>
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-2">
+                    <h3 class="font-bold text-blue-600">ખૂણાના સૂત્રો</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">અંદરના ખૂણાનો સરવાળો = $(n-2) \times 180^\circ$. બધા જ બહિષ્કોણનો સરવાળો = $360^\circ$.</p>
+                </div>
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-2">
+                    <h3 class="font-bold text-orange-500">સમાંતરબાજુ ચતુષ્કોણ</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">સામસામેની બાજુઓ અને ખૂણા સમાન, પાસપાસેના ખૂણા પૂરક ($180^\circ$), વિકર્ણો દુભાગે છે.</p>
+                </div>
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-2">
+                    <h3 class="font-bold text-blue-600">ચોરસ અને લંબચોરસ</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">પ્રત્યેક ખૂણો $90^\circ$. ચોરસમાં બધી બાજુઓ સરખી અને વિકર્ણો કાટખૂણે દુભાગે છે.</p>
+                </div>
+                <div class="glass-card p-5 rounded-2xl shadow-sm space-y-2">
+                    <h3 class="font-bold text-orange-500">સમચતુષ્કોણ અને પતંગ</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">સમચતુષ્કોણમાં બધી બાજુઓ સરખી અને વિકર્ણો કાટખૂણે દુભાગે. પતંગમાં પાસપાસેની બાજુઓ સરખી.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GAMES ZONE SECTION (No Timer) -->
+        <section id="games" class="space-y-8 pt-10 border-t border-slate-200 dark:border-slate-800">
+            <div class="text-center space-y-3">
+                <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-300">કોઈ ટાઈમર કે કાઉન્ટડાઉન વગર મનફાવે તેમ રમો!</span>
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">🎮 ગેમ્સ ઝોન (Games Zone)</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm">રમતા-રમતા ગણિત શીખો! તમારી ગતિએ રમો અને સ્કોર બનાવો.</p>
+            </div>
+
+            <!-- Student Dashboard -->
+            <div class="glass-card p-6 rounded-2xl shadow-md grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
+                <div class="p-3 bg-blue-50 dark:bg-slate-800 rounded-xl">
+                    <div class="text-xs text-slate-500">ગેમ રમી</div>
+                    <div id="stat-played" class="text-xl font-bold text-blue-600">૦</div>
+                </div>
+                <div class="p-3 bg-orange-50 dark:bg-slate-800 rounded-xl">
+                    <div class="text-xs text-slate-500">બેસ્ટ સ્કોર</div>
+                    <div id="stat-score" class="text-xl font-bold text-orange-500">૦</div>
+                </div>
+                <div class="p-3 bg-blue-50 dark:bg-slate-800 rounded-xl">
+                    <div class="text-xs text-slate-500">કોઈન્સ</div>
+                    <div id="stat-coins" class="text-xl font-bold text-blue-600">⭐ ૦</div>
+                </div>
+                <div class="p-3 bg-orange-50 dark:bg-slate-800 rounded-xl">
+                    <div class="text-xs text-slate-500">ચોકસાઈ</div>
+                    <div id="stat-accuracy" class="text-xl font-bold text-orange-500">૧૦૦%</div>
+                </div>
+                <div class="p-3 bg-blue-50 dark:bg-slate-800 rounded-xl">
+                    <div class="text-xs text-slate-500">બેજ અનલોક</div>
+                    <div id="stat-badges" class="text-xl font-bold text-blue-600">⭐ પ્રથમ જીત</div>
+                </div>
+                <div class="p-3 bg-orange-50 dark:bg-slate-800 rounded-xl">
+                    <div class="text-xs text-slate-500">પ્રગતિ</div>
+                    <div id="stat-progress" class="text-xl font-bold text-orange-500">૧૦%</div>
+                </div>
+            </div>
+
+            <!-- Game Selection Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="game-selection-grid">
+                <!-- Game 1 -->
+                <div onclick="loadGame(1)" class="glass-card p-6 rounded-2xl shadow-md cursor-pointer hover:border-blue-500 transition transform hover:-translate-y-1 space-y-3">
+                    <div class="text-3xl">🧩</div>
+                    <h3 class="font-bold text-lg">૧. આકૃતિ મિલાવો (Match Shapes)</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">સાચી આકૃતિ અને તેના નામનું જોડાણ કરો.</p>
+                </div>
+                <!-- Game 2 -->
+                <div onclick="loadGame(2)" class="glass-card p-6 rounded-2xl shadow-md cursor-pointer hover:border-blue-500 transition transform hover:-translate-y-1 space-y-3">
+                    <div class="text-3xl">🔍</div>
+                    <h3 class="font-bold text-lg">૨. આકૃતિ ઓળખો (Guess the Shape)</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">આપેલ ચિત્ર જોઈને સાચો આકાર ઓળખો.</p>
+                </div>
+                <!-- Game 3 -->
+                <div onclick="loadGame(3)" class="glass-card p-6 rounded-2xl shadow-md cursor-pointer hover:border-blue-500 transition transform hover:-translate-y-1 space-y-3">
+                    <div class="text-3xl">⚖️</div>
+                    <h3 class="font-bold text-lg">૩. સાચું કે ખોટું (True or False)</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">ગુણધર્મો ચકાસીને સાચું અથવા ખોટું જણાવો.</p>
+                </div>
+                <!-- Game 4 -->
+                <div onclick="loadGame(4)" class="glass-card p-6 rounded-2xl shadow-md cursor-pointer hover:border-blue-500 transition transform hover:-translate-y-1 space-y-3">
+                    <div class="text-3xl">📐</div>
+                    <h3 class="font-bold text-lg">૪. સૂત્ર પડકાર (Formula Challenge)</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">ખૂણાના સરવાળા અને સૂત્રના દાખલા ગણો.</p>
+                </div>
+                <!-- Game 5 -->
+                <div onclick="loadGame(5)" class="glass-card p-6 rounded-2xl shadow-md cursor-pointer hover:border-blue-500 transition transform hover:-translate-y-1 space-y-3">
+                    <div class="text-3xl">⭐</div>
+                    <h3 class="font-bold text-lg">૫. પ્રકરણ ચેલેન્જ (Chapter Challenge)</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">સમગ્ર પ્રકરણમાંથી મિશ્ર પ્રશ્નોત્તરી.</p>
+                </div>
+                <!-- Game 6 -->
+                <div onclick="loadGame(6)" class="glass-card p-6 rounded-2xl shadow-md cursor-pointer hover:border-blue-500 transition transform hover:-translate-y-1 space-y-3">
+                    <div class="text-3xl">🎯</div>
+                    <h3 class="font-bold text-lg">૬. ગુણધર્મ શોધો (Find Property)</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">આપેલ આકાર માટે સાચો ગુણધર્મ પસંદ કરો.</p>
+                </div>
+            </div>
+
+            <!-- Active Game Arena (Hidden by default) -->
+            <div id="game-arena" class="hidden glass-card p-6 md:p-8 rounded-2xl shadow-xl max-w-2xl mx-auto space-y-6">
+                <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-800">
+                    <button onclick="closeGame()" class="text-sm font-semibold text-blue-600 hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> તમામ ગેમ્સ પર પાછા જાઓ</button>
+                    <span id="game-title" class="font-bold text-orange-500">ગેમ</span>
+                </div>
+                <div id="game-content" class="space-y-4">
+                    <!-- Dynamic Game Content -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-slate-200 dark:border-slate-800 mt-20 py-8 text-center text-sm text-slate-600 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-semibold">📚 ધોરણ 8 ગણિત - વક્ર, બહુકોણ અને ચતુષ્કોણ (ગુજરાતી માધ્યમ)</p>
+            <p>વિદ્યાર્થીઓ માટે સરળ અને આધુનિક ડિજિટલ શિક્ષણ.</p>
+            <p class="text-xs text-slate-400">© 2026 Educational Web App. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button onclick="scrollToTop()" id="backToTop" class="fixed bottom-6 right-6 z-40 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg hidden items-center justify-center hover:bg-blue-700 transition">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Scroll Progress & Back to Top
+        window.onscroll = function() {
+            let winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress").style.width = scrolled + "%";
+
+            if (winScroll > 300) {
+                document.getElementById("backToTop").style.display = "flex";
+            } else {
+                document.getElementById("backToTop").style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                icon.className = 'fa-solid fa-moon text-lg text-slate-600';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                icon.className = 'fa-solid fa-sun text-lg text-yellow-400';
+            }
+        }
+
+        // Load Saved Theme
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').className = 'fa-solid fa-sun text-lg text-yellow-400';
+        }
+
+        // Practice Answer Toggle
+        function toggleAnswer(btn) {
+            const box = btn.nextElementSibling;
+            box.classList.toggle('hidden');
+            btn.innerHTML = box.classList.contains('hidden') ? 'ઉત્તર જુઓ <i class="fa-solid fa-chevron-down ml-1"></i>' : 'ઉત્તર છુપાવો <i class="fa-solid fa-chevron-up ml-1"></i>';
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            if(!term) return;
+            const sections = document.querySelectorAll('section');
+            for(let sec of sections) {
+                if(sec.innerText.toLowerCase().includes(term)) {
+                    sec.scrollIntoView({behavior: 'smooth'});
+                    break;
+                }
+            }
+        });
+
+        // Quiz Data (25 MCQs)
+        const quizData = [
+            { q: "ચતુષ્કોણના ચારેય ખૂણાના માપનો સરવાળો કેટલો થાય છે?", options: ["૧૮૦°", "૩૬૦°", "૫૪૦°", "૭૨૦°"], ans: 1 },
+            { q: "ત્રિકોણના અંદરના ખૂણાના માપનો સરવાળો કેટલો હોય છે?", options: ["૯૦°", "૧૮૦°", "૩૬૦°", "૩૬૦°"], ans: 1 },
+            { q: "કોઈપણ બહુકોણના બધા જ બહિષ્કોણોના માપનો સરવાળો કેટલો હોય છે?", options: ["૧૮૦°", "૩૬૦°", "૫૪૦°", "૯૦°"], ans: 1 },
+            { q: "n બાજુવાળા બહુકોણના અંદરના ખૂણાના સરવાળાનું સૂત્ર કયું છે?", options: ["(n-2) × 180°", "n × 180°", "(n-1) × 180°", "360° / n"], ans: 0 },
+            { q: "જે ચતુષ્કોણના પ્રત્યેક ખૂણો 90° હોય અને સામસામેની બાજુઓ સરખી હોય તેને શું કહેવાય?", options: ["સમચતુષ્કોણ", "લંબચોરસ", "પતંગ", "સમલંબ"], ans: 1 },
+            { q: "જે સમાંતરબાજુ ચતુષ્કોણની બધી જ બાજુઓ સરખી હોય તેને શું કહેવાય?", options: ["લંબચોરસ", "ચોરસ", "સમચતુષ્કોણ", "ત્રિકોણ"], ans: 2 },
+            { q: "સમચતુષ્કોણના વિકર્ણો પરસ્પર કેવા હોય છે?", options: ["સમાન", "કાટખૂણે દુભાગે", "સમાંતર", "અસમાન"], ans: 1 },
+            { q: "નિયમિત ષષ્ટકોણના પ્રત્યેક બહિષ્કોણનું માપ કેટલું થાય?", options: ["૩૦°", "૪૫°", "૬૦°", "૯૦°"], ans: 2 },
+            { q: "જે વક્ર પોતાની જાતને ક્યાંય ક્રોસ ન કરતો હોય તેને શું કહેવાય?", options: ["खुલ્લો વક્ર", "સરળ વક્ર", "અંતર્મુખ વક્ર", "બિન-સરળ વક્ર"], ans: 1 },
+            { q: "પંચકોણના અંદરના ખૂણાના માપનો સરવાળો કેટલો થાય?", options: ["૩૬૦°", "૫૪૦°", "૭૨૦°", "૧૮૦°"], ans: 1 },
+            { q: "જે ચતુષ્કોણમાં સામસામેની બાજુઓની માત્ર એક જ જોડ સમાંતર હોય તેને શું કહેવાય?", options: ["સમલંબ ચતુષ્કોણ", "સમાંતરબાજુ", "સમચતુષ્કોણ", "ચોરસ"], ans: 0 },
+            { q: "ચોરસના વિકર્ણો પરસ્પર કેવા હોય છે?", options: ["સમાન અને કાટખૂણે દુભાગે", "અસમાન", "ફક્ત સમાંતર", "કાટખૂણે ન દુભાગે"], ans: 0 },
+            { q: "સમાંતરબાજુ ચતુષ્કોણના પાસપાસેના ખૂણાઓ કેવા હોય છે?", options: ["કોટિચોરસ", "પૂરક (૧૮૦°)", "સમાન", "કાટખૂણા"], ans: 1 },
+            { q: "8 બાજુવાળા બહુકોણને શું કહેવાય?", options: ["ષષ્ટકોણ", "સપ્તકોણ", "અષ્ટકોણ", "પંચકોણ"], ans: 2 },
+            { q: "જે બહુકોણના બધા જ ખૂણા 180° કરતા નાના હોય તેને શું કહેવાય?", options: ["અંતર્મુખ", "બહિર્મુખ", "નિયમિત", "ખુલ્લો"], ans: 1 },
+            { q: "જે બહુકોણની બધી બાજુઓ અને ખૂણા સરખા હોય તેને શું કહેવાય?", options: ["નિયમિત બહુકોણ", "અનિયમિત બહુકોણ", "અંતર્મુખ", "સરળ"], ans: 0 },
+            { q: "ત્રિકોણ એ કેટલા બાજુવાળો બહુકોણ છે?", options: ["૩", "૪", "૫", "૬"], ans: 0 },
+            { q: "સપ્તકોણમાં બાજુઓની સંખ્યા કેટલી હોય છે?", options: ["૫", "૬", "૭", "૮"], ans: 2 },
+            { q: "જે વક્રનો શરૂઆતનો અને અંતિમ છેડો અલગ હોય તેને શું કહેવાય?", options: ["બંધ વક્ર", "खुલ્લો વક્ર", "સરળ વક્ર", "સમતલીય"], ans: 1 },
+            { q: "લંબચોરસના વિકર્ણોની લંબાઈ કેવી હોય છે?", options: ["સમાન", "અસમાન", "અડધી", "બમણી"], ans: 0 },
+            { q: "પતંગ આકાર ચતુષ્કોણમાં પાસપાસેની બાજુઓની કેટલી જોડ સમાન હોય છે?", options: ["એક", "બે", "ત્રણ", "ચાર"], ans: 1 },
+            { q: "જો કોઈ નિયમિત બહુકોણનું પ્રત્યેક બહિષ્કોણ 40° હોય, તો બાજુઓની સંખ્યા કેટલી?", options: ["૬", "૮", "૯", "૧૦"], ans: 2 },
+            { q: "ચતુષ્કોણ અંદરના ખૂણાના સરવાળા સૂત્રમાં n શું દર્શાવે છે?", options: ["ખૂણાઓ", "વિકર્ણો", "બાજુઓની સંખ્યા", "શિરોબિંદુ"], ans: 2 },
+            { q: "નીચેનામાંથી કયો બંધ વક્ર છે?", options: ["C", "U", "વર્તુળ", "S"], ans: 2 },
+            { q: "ગણિતમાં માત્ર રેખાખંડોથી બનતી બંધ આકૃતિને શું કહેવાય?", options: ["વક્ર", "બહુકોણ", "કિરણ", "રેખા"], ans: 1 }
+        ];
+
+        let currentQ = 0;
+        let quizScore = 0;
+
+        function loadQuiz() {
+            if(currentQ >= quizData.length) {
+                document.getElementById('quiz-container').classList.add('hidden');
+                document.getElementById('quiz-complete').classList.remove('hidden');
+                document.getElementById('final-score').innerText = `તમારો સ્કોર: ${quizScore} / ${quizData.length}`;
+                updateStats(quizScore);
+                return;
+            }
+
+            const q = quizData[currentQ];
+            document.getElementById('question-number').innerText = `પ્રશ્ન ${currentQ + 1} / ${quizData.length}`;
+            document.getElementById('score-display').innerText = `સ્કોર: ${quizScore}`;
+            document.getElementById('quiz-progress').style.width = ((currentQ / quizData.length) * 100) + "%";
+            document.getElementById('question-text').innerText = q.q;
+
+            const opts = document.getElementById('options-container');
+            opts.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-3 text-left rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-800 transition font-semibold text-sm";
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx, q.ans);
+                opts.appendChild(btn);
+            });
+            document.getElementById('quiz-feedback').classList.add('hidden');
+        }
+
+        function selectOption(selected, correct) {
+            const opts = document.getElementById('options-container').children;
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+
+            for(let i=0; i<opts.length; i++) {
+                opts[i].disabled = true;
+                if(i === correct) {
+                    opts[i].classList.add('bg-green-100', 'dark:bg-green-900/50', 'border-green-500', 'text-green-700', 'dark:text-green-300');
+                }
+                if(i === selected && selected !== correct) {
+                    opts[i].classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
+                }
+            }
+
+            if(selected === correct) {
+                quizScore++;
+                feedback.className = "mt-4 p-3 rounded-xl bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300 font-semibold text-center";
+                feedback.innerText = "બરાબર! સાચો જવાબ 🎉";
+            } else {
+                feedback.className = "mt-4 p-3 rounded-xl bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 font-semibold text-center";
+                feedback.innerText = "ખોટો જવાબ!";
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                loadQuiz();
+            }, 1200);
+        }
+
+        function restartQuiz() {
+            currentQ = 0;
+            quizScore = 0;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-complete').classList.add('hidden');
+            loadQuiz();
+        }
+
+        // Initialize Quiz on load
+        loadQuiz();
+
+        // Games Zone Logic (No Timer)
+        let userStats = JSON.parse(localStorage.getItem('studentStats')) || { played: 0, bestScore: 0, coins: 0, accuracy: 100 };
+
+        function updateStats(score) {
+            userStats.played++;
+            userStats.coins += 10;
+            if(score > userStats.bestScore) userStats.bestScore = score;
+            localStorage.setItem('studentStats', JSON.stringify(userStats));
+            renderStats();
+        }
+
+        function renderStats() {
+            document.getElementById('stat-played').innerText = userStats.played;
+            document.getElementById('stat-score').innerText = userStats.bestScore;
+            document.getElementById('stat-coins').innerText = `⭐ ${userStats.coins}`;
+            document.getElementById('stat-accuracy').innerText = userStats.accuracy + "%";
+            document.getElementById('stat-progress').innerText = Math.min(100, userStats.played * 20) + "%";
+        }
+        renderStats();
+
+        function loadGame(gameId) {
+            document.getElementById('game-selection-grid').classList.add('hidden');
+            document.getElementById('game-arena').classList.remove('hidden');
+            const arena = document.getElementById('game-content');
+            const title = document.getElementById('game-title');
+
+            if(gameId === 1) {
+                title.innerText = "૧. આકૃતિ મિલાવો (Match Shapes)";
+                arena.innerHTML = `
+                    <p class="font-bold text-sm">નીચે આપેલ આકારનું સાચું નામ પસંદ કરો:</p>
+                    <div class="flex justify-center p-4 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                        <svg class="w-24 h-24 text-blue-600" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><rect x="20" y="20" width="60" height="60"/></svg>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="gameFeedback(true)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold hover:bg-blue-50">ચોરસ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold hover:bg-blue-50">ત્રિકોણ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold hover:bg-blue-50">વર્તુળ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold hover:bg-blue-50">પંચકોણ</button>
+                    </div>
+                    <div id="g-feedback" class="text-center font-bold"></div>
+                `;
+            } else if(gameId === 2) {
+                title.innerText = "૨. આકૃતિ ઓળખો (Guess the Shape)";
+                arena.innerHTML = `
+                    <p class="font-bold text-sm">જેની બધી બાજુઓ સરખી અને વિકર્ણો કાટખૂણે દુભાગે તે આકાર કયો?</p>
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">લંબચોરસ</button>
+                        <button onclick="gameFeedback(true)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">સમચતુષ્કોણ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">સમલંબ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">પતંગ</button>
+                    </div>
+                    <div id="g-feedback" class="text-center font-bold"></div>
+                `;
+            } else if(gameId === 3) {
+                title.innerText = "૩. સાચું કે ખોટું (True or False)";
+                arena.innerHTML = `
+                    <p class="font-bold text-sm">ચતુષ્કોણના ચારેય ખૂણાના માપનો સરવાળો 360° થાય છે?</p>
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <button onclick="gameFeedback(true)" class="p-4 bg-green-100 text-green-700 rounded-xl font-bold">સાચું (True)</button>
+                        <button onclick="gameFeedback(false)" class="p-4 bg-red-100 text-red-700 rounded-xl font-bold">ખોટું (False)</button>
+                    </div>
+                    <div id="g-feedback" class="text-center font-bold"></div>
+                `;
+            } else if(gameId === 4) {
+                title.innerText = "૪. સૂત્ર પડકાર (Formula Challenge)";
+                arena.innerHTML = `
+                    <p class="font-bold text-sm">પંચકોણના અંદરના ખૂણાના માપનો સરવાળો કેટલો?</p>
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૩૬૦°</button>
+                        <button onclick="gameFeedback(true)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૫૪૦°</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૭૨૦°</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૧૮૦°</button>
+                    </div>
+                    <div id="g-feedback" class="text-center font-bold"></div>
+                `;
+            } else if(gameId === 5) {
+                title.innerText = "૫. પ્રકરણ ચેલેન્જ (Chapter Challenge)";
+                arena.innerHTML = `
+                    <p class="font-bold text-sm">નિયમિત ષષ્ટકોણના પ્રત્યેક બહિષ્કોણનું માપ કેટલું?</p>
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૩૦°</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૪૫°</button>
+                        <button onclick="gameFeedback(true)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૬૦°</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">૯૦°</button>
+                    </div>
+                    <div id="g-feedback" class="text-center font-bold"></div>
+                `;
+            } else if(gameId === 6) {
+                title.innerText = "૬. ગુણધર્મ શોધો (Find Property)";
+                arena.innerHTML = `
+                    <p class="font-bold text-sm">કયા ચતુષ્કોણમાં વિકર્ણો સમાન હોય છે?</p>
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="gameFeedback(true)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">લંબચોરસ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">સમચતુષ્કોણ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">પતંગ</button>
+                        <button onclick="gameFeedback(false)" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-semibold">સમલંબ</button>
+                    </div>
+                    <div id="g-feedback" class="text-center font-bold"></div>
+                `;
+            }
+        }
+
+        function gameFeedback(isCorrect) {
+            const fb = document.getElementById('g-feedback');
+            if(isCorrect) {
+                fb.className = "text-center font-bold text-green-600 text-lg";
+                fb.innerText = "સંદેશ: સાચો જવાબ! ખૂબ સરસ! 🎉";
+                updateStats(10);
+            } else {
+                fb.className = "text-center font-bold text-red-500 text-lg";
+                fb.innerText = "ખોટો જવાબ, ફરી પ્રયત્ન કરો!";
+            }
+        }
+
+        function closeGame() {
+            document.getElementById('game-arena').classList.add('hidden');
+            document.getElementById('game-selection-grid').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
